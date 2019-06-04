@@ -1,0 +1,23 @@
+server:
+  port: 8888
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    hikari:
+      connection-timeout: 400000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximumPoolSize: 25
+      minimum-idle: 5
+    type: com.zaxxer.hikari.HikariDataSource
+
+mybatis-plus:
+  mapper-locations: classpath*:xyz/iotcode/simpleadmin/*/mapper/xml/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwtp:
+  store-type: 0
+  max-token: 3
