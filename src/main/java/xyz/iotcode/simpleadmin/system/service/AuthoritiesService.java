@@ -2,6 +2,10 @@ package xyz.iotcode.simpleadmin.system.service;
 
 import xyz.iotcode.simpleadmin.system.entity.Authorities;
 import com.baomidou.mybatisplus.extension.service.IService;
+import xyz.iotcode.simpleadmin.system.entity.RoleAuthorities;
+import xyz.iotcode.simpleadmin.system.pojo.dto.AddRoleAuthDTO;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -13,4 +17,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AuthoritiesService extends IService<Authorities> {
 
+    Set<Authorities> getAuthByUserId(Long userId);
+
+    Set<Authorities> getAuthByUsername(String username);
+
+    String[] getAuthStrByUserId(Long userId);
+
+    boolean addRoleAuth(AddRoleAuthDTO dto);
+
+    boolean sync();
 }

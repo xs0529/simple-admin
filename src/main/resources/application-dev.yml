@@ -16,3 +16,6 @@ logging:
     org:
       wf:
         jwtp: info
+
+jwtp:
+  exclude-path: /**

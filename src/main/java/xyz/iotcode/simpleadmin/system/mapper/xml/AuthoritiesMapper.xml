@@ -11,5 +11,34 @@
         <result column="create_time" property="createTime" />
         <result column="url" property="url" />
     </resultMap>
+    <select id="getAuthByUserId" resultType="xyz.iotcode.simpleadmin.system.entity.RoleAuthorities">
+        SELECT
+            a.*
+        FROM
+            sys_user u
+            JOIN sys_user_role ur ON u.user_id = ur.user_id
+            JOIN sys_role r ON ur.role_id = r.role_id
+            JOIN sys_role_authorities ra ON r.role_id = ra.role_id
+            JOIN sys_authorities a ON ra.authority = a.authority
+            WHERE u.user_id = #{userId}
+    </select>
+    <select id="getAuthByUsername" resultType="xyz.iotcode.simpleadmin.system.entity.RoleAuthorities">
+        SELECT
+            a.*
+        FROM
+            sys_user u
+            JOIN sys_user_role ur ON u.user_id = ur.user_id
+            JOIN sys_role r ON ur.role_id = r.role_id
+            JOIN sys_role_authorities ra ON r.role_id = ra.role_id
+            JOIN sys_authorities a ON ra.authority = a.authority
+            WHERE u.username = #{username}
+    </select>
+    <insert id="saveAll">
+        insert into sys_role_authorities (role_id, authority)
+        values
+        <foreach collection="dto.authList" item="item" index="index" separator=",">
+            (#{dto.roleId} , #{item})
+        </foreach>
+    </insert>
 
 </mapper>

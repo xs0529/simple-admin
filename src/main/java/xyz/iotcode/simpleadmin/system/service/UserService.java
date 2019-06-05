@@ -19,7 +19,11 @@ public interface UserService extends IService<User> {
 
     User getByUsername(String username);
 
+    User getByUserId(Long userId);
+
     User add(User user);
 
-    User update(User user);
+    boolean update(User user);
+
+    boolean delAll(String ids);
 }

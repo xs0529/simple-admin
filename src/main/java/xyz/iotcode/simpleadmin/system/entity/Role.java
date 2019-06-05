@@ -37,6 +37,10 @@ public class Role extends Model<Role> {
     @TableField("role_name")
     private String roleName;
 
+    @ApiModelProperty(value = "角色标识")
+    @TableField("label")
+    private String label;
+
     @ApiModelProperty(value = "备注")
     @TableField("comments")
     private String comments;

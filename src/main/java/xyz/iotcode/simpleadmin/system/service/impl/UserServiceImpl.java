@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +20,8 @@ import xyz.iotcode.simpleadmin.system.mapper.RoleMapper;
 import xyz.iotcode.simpleadmin.system.mapper.UserMapper;
 import xyz.iotcode.simpleadmin.system.pojo.dto.QueryUserPageDTO;
 import xyz.iotcode.simpleadmin.system.service.UserService;
+
+import java.util.Arrays;
 
 /**
  * <p>
@@ -60,6 +64,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return new User().selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
     }
 
+    @Cacheable(value = "user:byUserId", key = "#userId", unless = "#result==null")
+    @Override
+    public User getByUserId(Long userId) {
+        return getById(userId);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public User add(User user) {
@@ -71,21 +81,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setPassword("123456");
         }
         user.setPassword(SecureUtil.hmacMd5(user.getPassword()).toString());
-        one.insert();
+        user.insert();
         if (!CollectionUtils.isEmpty(user.getRoles())){
             user.getRoles().forEach(role -> {
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(role.getRoleId());
-                userRole.setUserId(one.getUserId());
+                userRole.setUserId(user.getUserId());
                 userRole.insert();
             });
         }
-        return one;
+        return user;
     }
 
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = "user:byUserId", key = "#user.userId"),
+            @CacheEvict(value = "user:byUsername", key = "#user.userId"),
+            @CacheEvict(value = "user:page", allEntries = true)
+    })
     @Override
-    public User update(User user) {
+    public boolean update(User user) {
         String username = user.getUsername();
         user.setUsername(null);
         user.updateById();
@@ -99,6 +114,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 userRole.insert();
             });
         }
-        return user;
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(value = "user:byUserId", allEntries = true),
+            @CacheEvict(value = "user:byUsername", allEntries = true),
+            @CacheEvict(value = "user:page", allEntries = true)
+    })
+    @Override
+    public boolean delAll(String ids) {
+        String[] split = ids.split(",");
+        return removeByIds(Arrays.asList(split));
     }
 }
