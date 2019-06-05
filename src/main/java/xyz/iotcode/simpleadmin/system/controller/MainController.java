@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wf.jwtp.provider.Token;
@@ -18,7 +19,6 @@ import xyz.iotcode.simpleadmin.system.service.AuthoritiesService;
 import xyz.iotcode.simpleadmin.system.service.RoleService;
 import xyz.iotcode.simpleadmin.system.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -27,6 +27,7 @@ import java.util.List;
  */
 @Api(tags = "个人信息")
 @RestController
+@RequestMapping("index")
 public class MainController {
 
     @Autowired
@@ -49,7 +50,7 @@ public class MainController {
         User user = userService.getByUsername(username);
         if (user == null) {
             return Result.fail("账号不存在");
-        } else if (!user.getPassword().equals(SecureUtil.hmacMd5(password))) {
+        } else if (!user.getPassword().equals(SecureUtil.sha256(password))) {
             return Result.fail("密码错误");
         } else if (user.getState() != 0) {
             return Result.fail("账号被锁定");
@@ -65,15 +66,10 @@ public class MainController {
         return Result.ok("登录成功", token.getAccessToken());
     }
 
-    @ApiOperation(value = "用户登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "账号", required = true, dataType = "String", paramType = "form"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "form"),
-            @ApiImplicitParam(name = "rememberMe", value = "记住我", required = true)
-    })
-    @PostMapping("")
-    public Result<User> getUser(HttpServletRequest request){
-        Long loginUserId = TokenUtils.getLoginUserId(request);
+    @ApiOperation(value = "用户信息")
+    @PostMapping("userInfo")
+    public Result<User> getUser(){
+        Long loginUserId = TokenUtils.getLoginUserId();
         User byUserId = userService.getByUserId(loginUserId);
         if (byUserId==null){
             return Result.fail("用户不存在");

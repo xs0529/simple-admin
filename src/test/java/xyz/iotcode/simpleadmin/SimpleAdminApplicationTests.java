@@ -12,5 +12,4 @@ public class SimpleAdminApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }

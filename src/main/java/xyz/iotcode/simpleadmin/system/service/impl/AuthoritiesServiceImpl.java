@@ -54,7 +54,7 @@ public class AuthoritiesServiceImpl extends ServiceImpl<AuthoritiesMapper, Autho
         if (CollectionUtils.isEmpty(authByUserId)){
             return new String[0];
         }else {
-            return authByUserId.toArray(new String[authByUserId.size()]);
+            return authByUserId.stream().map(Authorities::getAuthority).toArray(String[]::new);
         }
     }
 
@@ -75,14 +75,14 @@ public class AuthoritiesServiceImpl extends ServiceImpl<AuthoritiesMapper, Autho
         String body = HttpRequest.get(serverConfig.getUrl()+"/v2/api-docs").execute().body();
         JSONObject jsonObject = JSONObject.parseObject(body);
         JSONObject paths = jsonObject.getJSONObject("paths");
-        int sort = 1;
+        final int[] sort = {1};
         List<Authorities> authoritiesList = new ArrayList<>();
         paths.entrySet().forEach(stringObjectEntry -> {
             JSONObject value = (JSONObject) stringObjectEntry.getValue();
             value.entrySet().forEach(stringObjectEntry1 -> {
                 JSONObject value1 = (JSONObject) stringObjectEntry1.getValue();
                 Authorities authorities = new Authorities();
-                authorities.setSort(sort);
+                authorities.setSort(sort[0]++);
                 authorities.setUrl(stringObjectEntry.getKey());
                 authorities.setAuthority(value1.getString("operationId"));
                 authorities.setAuthorityName(value1.getString("summary"));

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -41,7 +40,6 @@ public class User extends Model<User> {
     @TableField("username")
     private String username;
 
-    @JsonIgnore
     @ApiModelProperty(value = "密码")
     @TableField("password")
     private String password;

@@ -14,7 +14,6 @@ import xyz.iotcode.simpleadmin.common.util.TokenUtils;
 import xyz.iotcode.simpleadmin.system.entity.User;
 import xyz.iotcode.simpleadmin.system.pojo.dto.QueryUserPageDTO;
 import xyz.iotcode.simpleadmin.system.service.UserService;
-import java.util.Arrays;
 
 /**
  * <p>
@@ -35,7 +34,7 @@ public class UserController {
     @RequiresPermissions("user:page")
     @ApiOperation(value = "查询所有用户", nickname = "user:page")
     @PostMapping("page")
-    public Result<IPage> list(@RequestBody QueryUserPageDTO dto) {
+    public Result<IPage<User>> list(@RequestBody QueryUserPageDTO dto) {
         return Result.ok(userService.getUserPage(dto));
     }
 
@@ -94,7 +93,7 @@ public class UserController {
         if (StringUtils.isBlank(updatePsw.getNewPsw())||StringUtils.isBlank(updatePsw.getOldPsw())){
             return Result.fail("请传入原密码以及新密码");
         }
-        if (!updatePsw.getOldPsw().equals(userService.getById(TokenUtils.getLoginUserId()).getPassword())) {
+        if (!SecureUtil.sha256(updatePsw.getOldPsw()).equals(userService.getById(TokenUtils.getLoginUserId()).getPassword())) {
             return Result.fail("原密码不正确");
         }
         User user = new User();
@@ -115,7 +114,7 @@ public class UserController {
     public Result resetPsw(@PathVariable("id") Long userId) {
         User user = new User();
         user.setUserId(userId);
-        user.setPassword(SecureUtil.hmacMd5("123456").toString());
+        user.setPassword(SecureUtil.sha256("123456"));
         if (userService.update(user)) {
             return Result.ok("重置密码成功");
         }
