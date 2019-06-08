@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.wf.jwtp.provider.Token;
 import org.wf.jwtp.provider.TokenStore;
-import xyz.iotcode.simpleadmin.common.Result;
+import xyz.iotcode.simpleadmin.common.pojo.vo.Result;
 import xyz.iotcode.simpleadmin.common.util.TokenUtils;
 import xyz.iotcode.simpleadmin.system.entity.User;
 import xyz.iotcode.simpleadmin.system.service.AuthoritiesService;

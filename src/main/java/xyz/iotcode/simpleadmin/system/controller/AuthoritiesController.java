@@ -12,18 +12,14 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.wf.jwtp.annotation.RequiresPermissions;
-import xyz.iotcode.simpleadmin.common.Result;
+import xyz.iotcode.simpleadmin.common.pojo.vo.Result;
 import xyz.iotcode.simpleadmin.system.entity.Authorities;
-import xyz.iotcode.simpleadmin.system.entity.Role;
 import xyz.iotcode.simpleadmin.system.entity.RoleAuthorities;
 import xyz.iotcode.simpleadmin.system.pojo.dto.AddRoleAuthDTO;
 import xyz.iotcode.simpleadmin.system.service.AuthoritiesService;
-import xyz.iotcode.simpleadmin.system.service.RoleAuthoritiesService;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>

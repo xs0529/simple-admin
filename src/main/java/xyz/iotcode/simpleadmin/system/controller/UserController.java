@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.wf.jwtp.annotation.RequiresPermissions;
-import xyz.iotcode.simpleadmin.common.Result;
+import xyz.iotcode.simpleadmin.common.pojo.vo.Result;
 import xyz.iotcode.simpleadmin.common.util.TokenUtils;
 import xyz.iotcode.simpleadmin.system.entity.User;
 import xyz.iotcode.simpleadmin.system.pojo.dto.QueryUserPageDTO;

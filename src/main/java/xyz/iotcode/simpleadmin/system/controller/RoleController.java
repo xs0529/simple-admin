@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.wf.jwtp.annotation.RequiresPermissions;
-import xyz.iotcode.simpleadmin.common.Result;
+import xyz.iotcode.simpleadmin.common.pojo.vo.Result;
 import xyz.iotcode.simpleadmin.system.entity.Role;
 import xyz.iotcode.simpleadmin.system.service.RoleService;
 

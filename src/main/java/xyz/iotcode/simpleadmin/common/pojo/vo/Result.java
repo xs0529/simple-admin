@@ -1,4 +1,4 @@
-package xyz.iotcode.simpleadmin.common;
+package xyz.iotcode.simpleadmin.common.pojo.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,7 +27,7 @@ public class Result<T> implements Serializable {
      * 返回消息
      */
     @ApiModelProperty(value = "返回消息")
-    private String message;
+    private String msg;
 
     /**
      * 返回代码
@@ -51,7 +51,7 @@ public class Result<T> implements Serializable {
     public static <T> Result <T> ok(String message, T data){
         Result result = new Result();
         result.setCode(200);
-        result.setMessage(message);
+        result.setMsg(message);
         result.setStatus(true);
         result.setData(data);
         return result;
@@ -73,7 +73,7 @@ public class Result<T> implements Serializable {
     public static <T> Result <T> fail(Integer code, String message, T data){
         Result result = new Result();
         result.setCode(code);
-        result.setMessage(message);
+        result.setMsg(message);
         result.setStatus(false);
         result.setData(data);
         return result;
